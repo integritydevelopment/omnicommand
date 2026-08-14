@@ -4,6 +4,7 @@ import { CheckCircle2, Circle, Plus, Trash2, ListTodo } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import KanbanBoard from "@/components/KanbanBoard";
 
 const PRIORITY_BADGE = {
   high: { label: "High", cls: "bg-red-500/10 text-red-400 border-red-500/20" },
@@ -16,6 +17,7 @@ export default function TodoDashboard() {
   const [loading, setLoading] = useState(true);
   const [newTitle, setNewTitle] = useState("");
   const [newPriority, setNewPriority] = useState("medium");
+  const [view, setView] = useState("list");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -56,6 +58,15 @@ export default function TodoDashboard() {
     }
   };
 
+  const moveTodo = async (id, status) => {
+    try {
+      await base44.entities.Todo.update(id, { status });
+      setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, status } : t)));
+    } catch (e) {
+      toast({ variant: "destructive", description: "Move failed" });
+    }
+  };
+
   const deleteTodo = async (id) => {
     try {
       await base44.entities.Todo.delete(id);
@@ -70,12 +81,29 @@ export default function TodoDashboard() {
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/50 overflow-hidden flex flex-col h-full">
-      <div className="p-4 border-b border-slate-800 flex items-center gap-2">
-        <ListTodo className="w-4 h-4 text-slate-400" />
-        <h3 className="text-sm font-semibold text-white">To-Do</h3>
-        <span className="text-xs text-slate-500">{active.length} active</span>
+      <div className="p-4 border-b border-slate-800 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <ListTodo className="w-4 h-4 text-slate-400" />
+          <h3 className="text-sm font-semibold text-white">To-Do</h3>
+          <span className="text-xs text-slate-500">{active.length} active</span>
+        </div>
+        <div className="flex items-center gap-0.5 bg-slate-950 rounded-md p-0.5">
+          <button
+            onClick={() => setView("list")}
+            className={`px-2 py-1 text-xs rounded transition-colors ${view === "list" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+          >
+            List
+          </button>
+          <button
+            onClick={() => setView("kanban")}
+            className={`px-2 py-1 text-xs rounded transition-colors ${view === "kanban" ? "bg-slate-700 text-white" : "text-slate-400 hover:text-white"}`}
+          >
+            Kanban
+          </button>
+        </div>
       </div>
 
+      {view === "list" && (
       <form onSubmit={addTodo} className="p-3 border-b border-slate-800 flex gap-2">
         <Input
           value={newTitle}
@@ -96,10 +124,15 @@ export default function TodoDashboard() {
           <Plus className="w-4 h-4" />
         </Button>
       </form>
+      )}
 
       <div className="flex-1 overflow-auto min-h-0">
         {loading ? (
           <div className="p-8 text-center text-slate-500 text-sm">Loading tasks…</div>
+        ) : view === "kanban" ? (
+          <div className="p-2 h-full">
+            <KanbanBoard todos={todos} onMove={moveTodo} onDelete={deleteTodo} />
+          </div>
         ) : (
           <div className="divide-y divide-slate-800/50">
             {active.map((todo) => (
