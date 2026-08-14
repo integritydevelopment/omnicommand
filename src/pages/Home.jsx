@@ -5,6 +5,7 @@ import AgentReports from "@/components/AgentReports";
 import TodoDashboard from "@/components/TodoDashboard";
 import AppLaunchpad from "@/components/AppLaunchpad";
 import WatchdogStatus from "@/components/WatchdogStatus";
+import DashboardGrid from "@/components/DashboardGrid";
 
 export default function Home() {
   return (
@@ -12,18 +13,14 @@ export default function Home() {
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <TopBar />
-        <main className="flex-1 overflow-auto p-4 lg:p-6 space-y-4 lg:space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 lg:h-[380px]">
-            <div className="lg:col-span-2 min-h-[400px] lg:min-h-0">
-              <AgentReports />
-            </div>
-            <div className="min-h-[300px] lg:min-h-0">
-              <TodoDashboard />
-            </div>
-          </div>
-          <WatchdogStatus />
-          <AppLaunchpad />
-        </main>
+        <DashboardGrid
+          widgets={[
+            { id: "reports", title: "Agent Reports", component: <AgentReports /> },
+            { id: "todo", title: "To-Do Dashboard", component: <TodoDashboard /> },
+            { id: "watchdogs", title: "Watchdogs", component: <WatchdogStatus /> },
+            { id: "launchpad", title: "App Launchpad", component: <AppLaunchpad /> },
+          ]}
+        />
       </div>
     </div>
   );
