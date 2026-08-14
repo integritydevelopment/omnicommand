@@ -1,0 +1,51 @@
+{
+  "name": "Watchdog",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "alert",
+        "error"
+      ],
+      "default": "active"
+    },
+    "last_result": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "warn",
+        "fail",
+        "pending"
+      ],
+      "default": "pending"
+    },
+    "last_check": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "interval_seconds": {
+      "type": "number",
+      "default": 300
+    },
+    "alert_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "target"
+  ]
+}
