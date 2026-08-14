@@ -1,0 +1,45 @@
+{
+  "name": "AgentReport",
+  "type": "object",
+  "properties": {
+    "agent_name": {
+      "type": "string",
+      "enum": [
+        "Claude Code",
+        "Codex",
+        "Hermes"
+      ]
+    },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "summary",
+        "status",
+        "error",
+        "completion"
+      ],
+      "default": "summary"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "failed",
+        "info"
+      ],
+      "default": "info"
+    }
+  },
+  "required": [
+    "agent_name",
+    "title",
+    "content"
+  ]
+}

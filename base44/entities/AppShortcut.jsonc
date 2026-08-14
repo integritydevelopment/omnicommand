@@ -1,0 +1,30 @@
+{
+  "name": "AppShortcut",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "command": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Development",
+        "Productivity",
+        "Media",
+        "System",
+        "Other"
+      ],
+      "default": "Other"
+    }
+  },
+  "required": [
+    "name",
+    "command"
+  ]
+}
